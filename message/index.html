@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Iqra ❤️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(ellipse at center, #28080f 0%, #150308 48%, #070103 100%);
+            color: #f5f5f7;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 16px;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .ambient-glow {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 650px;
+            height: 650px;
+            background: radial-gradient(circle, rgba(163, 28, 54, 0.16) 0%, rgba(88, 10, 25, 0.05) 50%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ---------- envelope stage ---------- */
+        .stage {
+            perspective: 1200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 26px;
+            transition: opacity 0.5s ease;
+        }
+
+        .header h1 {
+            font-family: 'Alex Brush', cursive;
+            font-size: clamp(30px, 7vw, 44px);
+            background: linear-gradient(135deg, #ffd700 0%, #ffc0cb 50%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 12px rgba(212, 175, 55, 0.4));
+            line-height: 1.2;
+        }
+
+        .header p {
+            font-size: 12.5px;
+            color: rgba(230, 180, 190, 0.75);
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        .envelope {
+            position: relative;
+            width: 420px;
+            height: 270px;
+            transform-style: preserve-3d;
+            cursor: pointer;
+            transition: transform 0.4s ease;
+            filter: drop-shadow(0 15px 35px rgba(120, 15, 35, 0.45));
+        }
+
+        @media (max-width: 480px) {
+            .envelope {
+                width: 88vw;
+                max-width: 340px;
+                height: 58vw;
+                max-height: 220px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .envelope {
+                width: 92vw;
+                max-width: 300px;
+                height: 60vw;
+                max-height: 195px;
+            }
+        }
+
+        .env-back {
+            position: absolute;
+            inset: 0;
+            background: #35040d;
+            border-radius: 8px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(138, 21, 41, 0.3);
+            overflow: hidden;
+        }
+
+        .env-back::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, transparent 60%, rgba(0, 0, 0, 0.4) 100%);
+        }
+
+        .mini-letter {
+            position: absolute;
+            left: 50%;
+            top: 8px;
+            transform: translateX(-50%);
+            width: 86%;
+            height: 92%;
+            background: #fcf8f2;
+            background-image:
+                radial-gradient(#e5d8c5 0.75px, transparent 0.75px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(252, 248, 242, 0.98));
+            background-size: 12px 12px, 100% 100%;
+            border-radius: 6px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(184, 134, 11, 0.3);
+            transform-origin: bottom center;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .mini-letter .mh {
+            font-family: 'Alex Brush', cursive;
+            font-size: clamp(22px, 5.5vw, 30px);
+            color: #4a0713;
+            line-height: 1;
+        }
+
+        .mini-letter .ms {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: clamp(12px, 3vw, 15px);
+            color: #6e1c2b;
+        }
+
+        .flap {
+            position: absolute;
+            inset: 0;
+        }
+
+        .flap-left {
+            clip-path: polygon(0 0, 0 100%, 52% 50%);
+            background: linear-gradient(to right, #600b1a, #8a1529);
+            z-index: 19;
+        }
+
+        .flap-right {
+            clip-path: polygon(100% 0, 100% 100%, 48% 50%);
+            background: linear-gradient(to left, #600b1a, #8a1529);
+            z-index: 18;
+        }
+
+        .flap-bottom {
+            clip-path: polygon(0 100%, 100% 100%, 50% 42%);
+            background: linear-gradient(to top, #600b1a 0%, #8a1529 60%, transparent 100%);
+            z-index: 20;
+        }
+
+        .flap-top {
+            clip-path: polygon(0 0, 100% 0, 50% 58%);
+            background: linear-gradient(to bottom, #ab1d38, #8a1529);
+            transform-origin: top center;
+            transform-style: preserve-3d;
+            z-index: 25;
+        }
+
+        .wax-seal {
+            position: absolute;
+            left: 50%;
+            top: 52%;
+            transform: translate(-50%, -50%);
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #e12d4a 0%, #b81b34 45%, #700c1c 100%);
+            box-shadow:
+                0 6px 18px rgba(0, 0, 0, 0.6),
+                inset 0 2px 4px rgba(255, 255, 255, 0.45),
+                inset 0 -3px 5px rgba(0, 0, 0, 0.6);
+            z-index: 30;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+        }
+
+        @media (max-width: 480px) {
+            .wax-seal {
+                width: 46px;
+                height: 46px;
+            }
+        }
+
+        .wax-seal:hover {
+            transform: translate(-50%, -50%) scale(1.08);
+            box-shadow:
+                0 8px 24px rgba(225, 45, 74, 0.55),
+                inset 0 2px 5px rgba(255, 255, 255, 0.6),
+                inset 0 -3px 5px rgba(0, 0, 0, 0.6);
+        }
+
+        .seal-inner {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 1.5px dashed rgba(255, 255, 255, 0.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.15) 0%, rgba(0, 0, 0, 0.25) 100%);
+        }
+
+        @media (max-width: 480px) {
+            .seal-inner {
+                width: 34px;
+                height: 34px;
+            }
+        }
+
+        .seal-inner i {
+            color: #fff;
+            font-size: 14px;
+            filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.7));
+        }
+
+        .open-hint {
+            margin-top: 26px;
+            color: rgba(230, 180, 190, 0.75);
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 16px;
+            text-align: center;
+            transition: opacity 0.4s ease;
+        }
+
+        .stage.hidden {
+            display: none;
+        }
+
+        /* ---------- full letter ---------- */
+        .letter-wrap {
+            width: 100%;
+            max-width: 680px;
+            background: #fcf8f2;
+            background-image:
+                radial-gradient(#e5d8c5 0.75px, transparent 0.75px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(252, 248, 242, 0.98));
+            background-size: 12px 12px, 100% 100%;
+            border-radius: 12px;
+            padding: 48px 44px;
+            color: #2b2220;
+            box-shadow:
+                0 25px 60px rgba(0, 0, 0, 0.6),
+                0 0 0 1px rgba(184, 134, 11, 0.35),
+                0 0 60px rgba(212, 175, 55, 0.12);
+            z-index: 10;
+            display: none;
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        .letter-wrap.visible {
+            display: block;
+        }
+
+        .accent-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: rgba(180, 115, 35, 0.6);
+            margin-bottom: 26px;
+        }
+
+        .accent-line {
+            width: 40px;
+            height: 1px;
+            background: rgba(180, 115, 35, 0.45);
+        }
+
+        .accent-heart {
+            color: #b81b34;
+            font-size: 13px;
+            animation: heartbeat 1.6s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            15% {
+                transform: scale(1.25);
+            }
+
+            30% {
+                transform: scale(1);
+            }
+
+            45% {
+                transform: scale(1.18);
+            }
+        }
+
+        .letter-wrap h1 {
+            font-family: 'Alex Brush', cursive;
+            font-size: clamp(38px, 8vw, 56px);
+            color: #4a0713;
+            text-align: center;
+            line-height: 1.1;
+            margin-bottom: 30px;
+        }
+
+        .letter-body p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(16px, 3.6vw, 19px);
+            line-height: 1.6;
+            font-weight: 500;
+            margin-bottom: 18px;
+        }
+
+        .letter-body p.question {
+            font-size: clamp(18px, 4vw, 21px);
+            font-style: italic;
+            color: #6e1c2b;
+            font-weight: 600;
+        }
+
+        .sign {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-top: 34px;
+            padding-top: 18px;
+            border-top: 1px dashed rgba(138, 21, 41, 0.25);
+        }
+
+        .sign-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 15px;
+            color: #6e1c2b;
+        }
+
+        .sign-name {
+            font-family: 'Alex Brush', cursive;
+            font-size: 34px;
+            color: #5c0a18;
+            line-height: 1.2;
+        }
+
+        .back-link {
+            color: rgba(230, 180, 190, 0.7);
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            z-index: 10;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #ffd700;
+        }
+
+        /* ---------- music pill ---------- */
+        .music-pill {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            background: rgba(22, 10, 15, 0.85);
+            border: 1px solid rgba(255, 40, 100, 0.35);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 100px;
+            padding: 10px 20px;
+            color: #ffc3d7;
+            font-size: 12.5px;
+            letter-spacing: 0.6px;
+            z-index: 50;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.55);
+            white-space: nowrap;
+            max-width: 92vw;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .music-pill .eq {
+            display: inline-flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 14px;
+        }
+
+        .music-pill .eq span {
+            width: 3px;
+            background: #ff2e5e;
+            border-radius: 2px;
+            animation: eqBounce 0.9s ease-in-out infinite;
+        }
+
+        .music-pill .eq span:nth-child(1) { height: 6px; animation-delay: 0s; }
+        .music-pill .eq span:nth-child(2) { height: 13px; animation-delay: 0.2s; }
+        .music-pill .eq span:nth-child(3) { height: 9px; animation-delay: 0.4s; }
+
+        .music-pill.paused .eq span {
+            animation-play-state: paused;
+        }
+
+        @keyframes eqBounce {
+
+            0%,
+            100% {
+                transform: scaleY(0.5);
+            }
+
+            50% {
+                transform: scaleY(1);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .letter-wrap {
+                padding: 32px 22px;
+            }
+        }
+
+        .floating-heart {
+            position: fixed;
+            bottom: -40px;
+            font-size: 20px;
+            opacity: 0;
+            animation: floatUp linear forwards;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(0) rotate(0deg);
+            }
+
+            10% {
+                opacity: 0.7;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-110vh) rotate(40deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="ambient-glow"></div>
+
+    <a class="back-link" href="/rose/">&larr; back to the rose</a>
+
+    <div class="stage" id="stage">
+        <div class="header">
+            <h1>A letter from my heart</h1>
+            <p>written just for you</p>
+        </div>
+
+        <div class="envelope" id="envelope">
+            <div class="env-back"></div>
+
+            <div class="mini-letter" id="miniLetter">
+                <span class="mh">Dearest Iqra</span>
+                <span class="ms">something written just for you...</span>
+            </div>
+
+            <div class="flap flap-left"></div>
+            <div class="flap flap-right"></div>
+            <div class="flap flap-bottom"></div>
+
+            <div class="flap flap-top" id="topFlap"></div>
+
+            <div class="wax-seal" id="waxSeal" role="button" aria-label="Open Letter">
+                <div class="seal-inner"><i class="fa-solid fa-heart"></i></div>
+            </div>
+        </div>
+
+        <p class="open-hint" id="openHint">Tap the seal to open</p>
+    </div>
+
+    <div class="letter-wrap" id="letterWrap">
+        <div class="accent-top">
+            <span class="accent-line"></span>
+            <i class="accent-heart">&#10084;</i>
+            <span class="accent-line"></span>
+        </div>
+
+        <h1>Dearest Iqra</h1>
+
+        <div class="letter-body">
+            <p>The first time I saw you, my heart had already decided that there was something incredibly special about you. There's literally a different kind of magic in your beauty, girl. 😭💗 Your eyes are so beautiful that I could get lost in them and forget about the rest of the world for a while. And your lips? Girl, those lips are dangerously kissable. 😭💋❤️🔥 Your smile, your eyes, your adorable face... you're a whole distraction, and honestly, I'm not even trying to recover. 🤌🏻😭</p>
+
+            <p>Lekin Iqra, sirf tumhari beauty hi nahi, tumhari vibes bhi mujhe attract karti hain. Humari baatein, humara connection, jis tarah humari energy match karti hai na, sometimes it genuinely feels like we were made for each other. 🥹❤️ Jaise tum meri favourite kind of person ho, jisse main ghanton baat kar sakta hoon, bina bore hue, bina kisi reason ke bas jiske saath rehne ka mann kare.</p>
+
+            <p>And honestly, tumhare saath sirf flirt nahi karna mujhe. Main tumhe apni favourite person banana chahta hoon. Tumhari smile ki wajah banna chahta hoon, tumhare random moods handle karna chahta hoon, tumhe tease karna, tumse cute-cute fights karna, tumhari har chhoti baat yaad rakhna aur tumhe woh pyaar dena jo tum deserve karti ho. 🫶🏻❤️🩹</p>
+
+            <p>Imagine us together, tum meri bakwaas sunke has rahi ho, main tumhe dekhke smile kar raha hoon, phir tum puchogi, "Kya dekh rahe ho?" Aur main bolunga, "Apni future favourite person ko dekh raha hoon, disturb mat karo." 😭😭❤️🔥</p>
+
+            <p>Iqra, I genuinely like you, and I want to make this connection something more beautiful. I want to be the one you think about before sleeping, the one whose message makes you smile, and the one you feel comfortable sharing everything with. 🥹💌</p>
+
+            <p class="question">So, pretty girl, ek sawaal hai tumse...</p>
+
+            <p class="question">Will you be my girl, my favourite person, my partner in all the stupid little things, and maybe the beginning of my favourite love story? ❤️🔥🫶🏻</p>
+
+            <p>Because if I get to choose someone to give my attention, affection, time and heart to, I'd love for that person to be you, Iqra. 💋❤️</p>
+
+            <p class="question">So, Iqra... will you be mine? 🥺💗</p>
+        </div>
+
+        <div class="sign">
+            <span class="sign-text">Forever yours,</span>
+            <span class="sign-name">Zade ❤️</span>
+        </div>
+    </div>
+
+    <div class="music-pill" id="musicPill" title="Tap to pause / play">
+        <span class="eq"><span></span><span></span><span></span></span>
+        <span id="musicLabel">Your Lips Are My Cigarette — Cursedcry</span>
+    </div>
+
+    <script>
+        (function () {
+            /* ---------- envelope open ---------- */
+            const envelope = document.getElementById('envelope');
+            const waxSeal = document.getElementById('waxSeal');
+            const stage = document.getElementById('stage');
+            const letterWrap = document.getElementById('letterWrap');
+            let opened = false;
+            let opening = false;
+
+            /* ---------- text streaming reveal ---------- */
+            let streamSkip = false;
+
+            function streamNodes(nodes, onDone) {
+                const full = nodes.map(n => Array.from(n.textContent));
+                nodes.forEach(n => { n.textContent = ''; n.style.visibility = 'hidden'; });
+
+                let ni = 0, ci = 0;
+
+                function finish() {
+                    nodes.forEach((n, idx) => {
+                        n.style.visibility = 'visible';
+                        n.textContent = full[idx].join('');
+                    });
+                    if (onDone) onDone();
+                }
+
+                function step() {
+                    if (streamSkip) { finish(); return; }
+                    if (ni >= nodes.length) { if (onDone) onDone(); return; }
+
+                    const n = nodes[ni];
+                    const chars = full[ni];
+                    n.style.visibility = 'visible';
+
+                    if (ci < chars.length) {
+                        const ch = chars[ci++];
+                        n.textContent += ch;
+
+                        const rect = n.getBoundingClientRect();
+                        if (rect.bottom > window.innerHeight - 30) {
+                            window.scrollBy(0, Math.min(rect.bottom - window.innerHeight + 60, 120));
+                        }
+
+                        let wait = 16;
+                        if (/[.!?,…]/.test(ch)) wait = 260;
+                        else if (ch === ' ') wait = 22;
+                        setTimeout(step, wait);
+                    } else {
+                        ni++; ci = 0;
+                        setTimeout(step, 240);
+                    }
+                }
+
+                step();
+                return finish;
+            }
+
+            function openLetter() {
+                if (opened || opening) return;
+                opening = true;
+
+                const tl = gsap.timeline({
+                    onComplete: () => {
+                        stage.classList.add('hidden');
+                        letterWrap.classList.add('visible');
+                        gsap.fromTo(letterWrap,
+                            { opacity: 0, y: 40 },
+                            { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }
+                        );
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        opened = true;
+
+                        const nodes = [
+                            letterWrap.querySelector('h1'),
+                            ...letterWrap.querySelectorAll('.letter-body p'),
+                            ...letterWrap.querySelectorAll('.sign span')
+                        ];
+                        const skipHandler = () => { streamSkip = true; };
+                        streamSkip = false;
+                        letterWrap.addEventListener('click', skipHandler);
+                        setTimeout(() => {
+                            streamNodes(nodes, () => {
+                                letterWrap.removeEventListener('click', skipHandler);
+                            });
+                        }, 950);
+                    }
+                });
+
+                tl.to(waxSeal, { scale: 1.35, opacity: 0, duration: 0.4, ease: 'back.in(1.7)' }, 0)
+                    .to('#topFlap', { rotateX: 180, duration: 0.8, ease: 'power2.inOut' }, 0.25)
+                    .set('#topFlap', { zIndex: 5 }, 0.6)
+                    .to('#miniLetter', { y: -120, scale: 1.05, duration: 0.7, ease: 'power2.out' }, 0.7)
+                    .to('#openHint', { opacity: 0, duration: 0.3 }, 0)
+                    .to(envelope, { opacity: 0, y: -30, duration: 0.5, ease: 'power2.in' }, 1.3)
+                    .to('.header', { opacity: 0, y: -20, duration: 0.4 }, 1.3);
+            }
+
+            waxSeal.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openLetter();
+            });
+            envelope.addEventListener('click', openLetter);
+
+            /* ---------- music ---------- */
+            const QUERY = 'Your Lips Are My Cigarette Cursedcry';
+            const pill = document.getElementById('musicPill');
+            const label = document.getElementById('musicLabel');
+            let audio = null;
+            let unlocked = false;
+
+            function pickTrack(list) {
+                return list.find(t => /cursedcry/i.test(t.artist || '') && /your lips are my cigarette/i.test(t.title || '')) ||
+                    list.find(t => /cursedcry/i.test(t.artist || '')) ||
+                    list[0];
+            }
+
+            function play() {
+                if (audio) {
+                    audio.play().then(() => pill.classList.remove('paused')).catch(() => {});
+                    return;
+                }
+                fetch('https://zade-music-api-dun.vercel.app/api/search?q=' + encodeURIComponent(QUERY))
+                    .then(r => r.json())
+                    .then(res => {
+                        const track = pickTrack((res && res.data) || []);
+                        if (!track || !track.stream_url) {
+                            label.textContent = 'tap to load music';
+                            return;
+                        }
+                        audio = new Audio(track.stream_url);
+                        audio.loop = true;
+                        audio.volume = 0.8;
+                        label.textContent = track.title + ' — ' + (track.artist || 'Eyedress');
+                        audio.play().then(() => pill.classList.remove('paused')).catch(() => {});
+                    })
+                    .catch(() => {
+                        label.textContent = 'tap to load music';
+                    });
+            }
+
+            function unlock() {
+                if (unlocked) return;
+                unlocked = true;
+                play();
+                document.removeEventListener('click', unlock);
+                document.removeEventListener('touchstart', unlock);
+            }
+            document.addEventListener('click', unlock);
+            document.addEventListener('touchstart', unlock);
+
+            pill.addEventListener('click', function (e) {
+                e.stopPropagation();
+                if (!audio) {
+                    unlocked = true;
+                    play();
+                } else if (audio.paused) {
+                    audio.play().then(() => pill.classList.remove('paused')).catch(() => {});
+                } else {
+                    audio.pause();
+                    pill.classList.add('paused');
+                }
+            });
+
+            /* ---------- floating hearts ---------- */
+            const hearts = ['❤️', '💗', '🌹', '✨', '💖'];
+            setInterval(() => {
+                const h = document.createElement('span');
+                h.className = 'floating-heart';
+                h.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                h.style.left = (Math.random() * 95) + 'vw';
+                h.style.fontSize = (14 + Math.random() * 18) + 'px';
+                h.style.animationDuration = (7 + Math.random() * 6) + 's';
+                document.body.appendChild(h);
+                setTimeout(() => h.remove(), 14000);
+            }, 900);
+        })();
+    </script>
+</body>
+
+</html>
